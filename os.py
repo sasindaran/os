@@ -1,9 +1,15 @@
 import streamlit as st
-import platform
+import subprocess
 
-# Get the operating system
-os_info = platform.system() + " " + platform.release()
+st.title("Linux Command Line in Streamlit")
 
-# Display it in Streamlit
-st.title("Operating System Information")
-st.write(f"Your operating system: **{os_info}**")
+# Input field for command
+command = st.text_input("Enter a Linux command:", "ls")
+
+if st.button("Run Command"):
+    try:
+        # Run the command and capture output
+        result = subprocess.run(command, shell=True, text=True, capture_output=True)
+        st.text_area("Output:", result.stdout + result.stderr, height=200)
+    except Exception as e:
+        st.error(f"Error: {e}")
